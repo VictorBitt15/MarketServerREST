@@ -2,6 +2,8 @@ package br.imd.ufrn.marketrest.Controller;
 
 import java.util.List;
 
+import br.imd.ufrn.marketrest.services.MarketService;
+import br.imd.ufrn.marketrest.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,24 +23,24 @@ import br.imd.ufrn.marketrest.model.Produto;
 @RequestMapping("/markets")
 public class MarketController {
     @Autowired
-    private MarketRepository marketRepository;
+    private MarketService marketService;
 
     @Autowired
-    private ProdutoRepository produtoRepository;
+    private ProdutoService produtoService;
 
     @GetMapping
     public List<Market> listMarkets(){
-        return marketRepository.findAll();
+        return marketService.listarMercados();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Market addMarket(@RequestBody Market market){
-        return marketRepository.save(market);
+        return marketService.createMercado(market);
     }
 
-    @PostMapping(path = "/{id}/produtos")
-    public Produto addProdutoInMarket(@RequestBody Produto produto, @PathVariable Long id){
-        return produtoRepository.save(produto);
+    @PostMapping(path = "/{nome}")
+    public Produto addProdutoInMarket(@RequestBody Produto produto, @PathVariable String nome){
+        return marketService.addProduto(nome,produto);
     }
 }

@@ -2,6 +2,7 @@ package br.imd.ufrn.marketrest.Controller;
 
 import java.util.List;
 
+import br.imd.ufrn.marketrest.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +20,17 @@ import br.imd.ufrn.marketrest.model.Produto;
 
 public class ProdutoController {
     @Autowired
-    private ProdutoRepository produtoRepository;
+    private ProdutoService produtoService;
 
     @GetMapping
     public List<Produto> listarProdutos(){
-        return produtoRepository.findAll();
+        return produtoService.encontrarTodos();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Produto addProduto(@RequestBody Produto produto){
-        return produtoRepository.save(produto);
+        return produtoService.createProduto(produto);
     }
 
 }

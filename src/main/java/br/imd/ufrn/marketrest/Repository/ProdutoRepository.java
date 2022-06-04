@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import br.imd.ufrn.marketrest.model.Produto;
 
+import java.util.List;
+
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long>{
-    
 }
