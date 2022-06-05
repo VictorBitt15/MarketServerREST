@@ -5,8 +5,8 @@ import br.imd.ufrn.marketrest.model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -22,8 +22,37 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public List<Produto> produtosMenorPreco(List<Produto> produtos){
-        return produtos;
+    public List<Produto> produtosMenorPreco(){
+        List<Produto> produtosMercados= new ArrayList<>();
+        List<Produto> produtosClientes = new ArrayList<>();
+
+        for(Produto prod : produtoRepository.findAll()){
+            if(prod.getPreco() == null){
+                produtosClientes.add(prod);
+            }else{
+                produtosMercados.add(prod);
+            }
+        }
+
+        List<String> produtosPorNome = new ArrayList<>();
+        List<Produto> menoresPreco = new ArrayList<>();
+
+        for(Produto prod : produtoRepository.findAll()){
+            produtosPorNome.add(prod.getNome());
+        }
+        for(String nomeProduto: produtosPorNome){
+            List<Produto> produtosFiltrados;
+            List<String> filtroProduto = Arrays.asList(nomeProduto);
+
+            produtosFiltrados = produtosMercados.stream()
+                    .filter(produtoFiltrado-> filtroProduto.contains(produtoFiltrado.getNome()))
+                    .collect(Collectors.toList());
+            Produto menorPreco = produtosFiltrados.stream().min(Comparator.comparing(Produto::getPreco)).orElse(null);
+            menoresPreco.add(menorPreco);
+        }
+
+        List<Produto> result = new ArrayList<>(new HashSet<>(menoresPreco));
+        return result;
     }
 
 }

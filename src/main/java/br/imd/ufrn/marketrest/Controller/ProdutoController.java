@@ -33,5 +33,10 @@ public class ProdutoController {
         return produtoService.createProduto(produto);
     }
 
+    @GetMapping(path = "/lowest")
+    public List<Produto> lowestProdutos(){
+        return produtoService.produtosMenorPreco();
+    }
+
 }
 

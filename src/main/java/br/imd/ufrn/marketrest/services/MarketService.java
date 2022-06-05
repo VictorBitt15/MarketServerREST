@@ -31,6 +31,8 @@ public class MarketService {
         Market market = marketRepository.findByNome(nome);
         market.addProdutos(produto);
 
+        produto.setMarket_id(market.getId());
+
         return produtoRepository.save(produto);
     }
 }
